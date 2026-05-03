@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Speurtocht Leeuwarden</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 100px;
+}
+#secret {
+    display: none;
+    margin-top: 20px;
+    font-size: 22px;
+}
+</style>
+</head>
+<body>
+
+<h2>Voer wachtwoord in</h2>
+
+<input type="password" id="pw">
+<button onclick="check()">OK</button>
+
+<div id="secret">
+🎉 Goed! Dit is de verborgen boodschap.
+</div>
+
+<script>
+function check() {
+    const code = "leeuwarden"; // verander dit
+    const input = document.getElementById("pw").value;
+
+    if (input === code) {
+        document.getElementById("secret").style.display = "block";
+    } else {
+        alert("Fout wachtwoord");
+    }
+}
+</script>
+
+</body>
+</html>
