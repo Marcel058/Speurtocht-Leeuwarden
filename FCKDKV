@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Geheime boodschap</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 100px;
+}
+#secret {
+    display: none;
+    margin-top: 20px;
+    font-size: 22px;
+}
+.box {
+    padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Voer wachtwoord in</h2>
+    <input type="password" id="pw">
+    <button onclick="check()">OK</button>
+
+    <div id="secret">
+        🎉 Dit is je verborgen tekst!
+    </div>
+</div>
+
+<script>
+function check() {
+    const wachtwoord = "VODKA";
+    const input = document.getElementById("pw").value;
+
+    if (input === wachtwoord) {
+        document.getElementById("secret").style.display = "block";
+    } else {
+        alert("Fout wachtwoord");
+    }
+}
+</script>
+
+</body>
+</html>
