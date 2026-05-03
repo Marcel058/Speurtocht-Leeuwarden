@@ -7,35 +7,51 @@
 body {
     font-family: Arial;
     text-align: center;
-    margin-top: 100px;
+    margin-top: 120px;
+    background: #f4f4f4;
 }
+
+.box {
+    background: white;
+    display: inline-block;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
 #secret {
     display: none;
     margin-top: 20px;
     font-size: 22px;
+    color: green;
 }
 </style>
 </head>
+
 <body>
 
-<h2>Voer wachtwoord in</h2>
+<div class="box">
+    <h2>🔐 Voer wachtwoord in</h2>
 
-<input type="password" id="pw">
-<button onclick="check()">OK</button>
+    <input type="password" id="pw" placeholder="wachtwoord">
+    <button onclick="check()">OK</button>
 
-<div id="Goed gedaan! Jullie hebben de opdracht voltooid en de code gevonden">
-🎉 Goed! Dit is de verborgen boodschap.
+    <div id="secret">
+        🎉 Goed gedaan! Nog één laatste stop:
+            51.5147° N, 7.6131° E 
+        Ga hiernaar toe en je weekend kan dan echt beginnen.
+    </div>
 </div>
 
 <script>
 function check() {
-    const code = "VODKA"; // verander dit
+    const code = "VODKA"; // <-- dit is je wachtwoord
     const input = document.getElementById("pw").value;
 
     if (input === code) {
         document.getElementById("secret").style.display = "block";
     } else {
-        alert("Fout wachtwoord");
+        alert("Fout wachtwoord!");
     }
 }
 </script>
