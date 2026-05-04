@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ACCESS TERMINAL</title>
 
 <style>
@@ -18,12 +20,16 @@ html, body{
     color:#00ff00;
 }
 
+/* MATRIX ACHTERGROND */
+
 canvas{
     position:fixed;
     top:0;
     left:0;
     z-index:0;
 }
+
+/* FULLSCREEN POPUP */
 
 #popup{
     position:fixed;
@@ -34,25 +40,40 @@ canvas{
     z-index:5;
 }
 
+/* HACKER BOX */
+
 .box{
     width:90%;
-    max-width:700px;
-    background:rgba(0,0,0,0.9);
+    max-width:750px;
+
+    background:rgba(0,0,0,0.92);
+
     border:2px solid #00ff00;
+
     border-radius:12px;
+
     padding:40px;
+
     text-align:center;
+
     box-shadow:0 0 30px #00ff00;
 }
 
+/* TITEL */
+
 h1{
-    text-shadow:0 0 10px #00ff00;
+    text-shadow:0 0 15px #00ff00;
 }
+
+/* TERMINAL TYPING */
 
 #typing{
     min-height:30px;
-    margin-bottom:20px;
+    margin-bottom:25px;
+    font-size:18px;
 }
+
+/* INPUT */
 
 input{
     background:black;
@@ -61,34 +82,79 @@ input{
     padding:12px;
     width:60%;
     font-size:18px;
+    font-family:monospace;
 }
+
+/* BUTTON */
 
 button{
     background:#00ff00;
     color:black;
     border:none;
     padding:12px 24px;
+    margin-left:10px;
     font-weight:bold;
     cursor:pointer;
 }
+
+button:hover{
+    box-shadow:0 0 15px #00ff00;
+}
+
+/* DECRYPTING */
 
 #decrypting{
     display:none;
     margin-top:30px;
     font-size:24px;
+    animation:blink 1s infinite;
 }
+
+/* SECRET */
 
 #secret{
     display:none;
     margin-top:30px;
-    font-size:28px;
-    line-height:1.5;
+}
+
+/* COUNTDOWN */
+
+#countdown{
+    font-size:55px;
+    margin-top:20px;
+    text-shadow:0 0 20px #00ff00;
+}
+
+/* FOTO */
+
+#bewijsfoto{
+
+    width:350px;
+
+    margin-top:25px;
+
+    border:3px solid #00ff00;
+
+    border-radius:12px;
+
+    box-shadow:0 0 30px #00ff00;
+
+    opacity:0;
+
+    filter:blur(25px);
+
+    transform:scale(0.9);
+
+    transition:all 4s ease;
+}
+
+/* GLOW */
+
+.glow{
     text-shadow:0 0 15px #00ff00;
 }
 
-.blink{
-    animation:blink 1s infinite;
-}
+/* BLINK */
 
 @keyframes blink{
     50%{
@@ -97,12 +163,15 @@ button{
 }
 
 </style>
+
 </head>
 
 <body>
 
+<!-- MATRIX -->
 <canvas id="matrix"></canvas>
 
+<!-- POPUP -->
 <div id="popup">
 
 <div class="box">
@@ -111,75 +180,123 @@ button{
 
 <div id="typing"></div>
 
-<input type="password" id="pw" placeholder="ENTER PASSWORD">
-<button onclick="checkPassword()">UNLOCK</button>
+<input type="password"
+       id="pw"
+       placeholder="ENTER PASSWORD">
+
+<button onclick="checkPassword()">
+UNLOCK
+</button>
 
 <div id="decrypting">
-DECRYPTING FILES<span class="blink">...</span>
+DECRYPTING FILES...
 </div>
 
+<!-- GEHEIME CONTENT -->
 <div id="secret">
 
-<h2>🎉 ACCESS GRANTED</h2>
+<h2 class="glow">
+🎉 ACCESS GRANTED
+</h2>
+    
+<img id="bewijsfoto"
+     src="foto.jpg">
+    
+<p class="glow">
+
+Nog één laatste stop:<br><br>
+
+51.5147° N, 7.6131° E
+
+</p>
 
 <div id="countdown"></div>
 
-<div id="decryptText">
-DECRYPTING IMAGE FILES...
-</div>
-
-<br>
+<p id="decryptText" class="glow">
+DECRYPTING IMAGE FILE...
+</p>
 
 <img id="bewijsfoto"
      src="foto.jpg">
-
 </div>
 
 </div>
 
 </div>
 
+<!-- GELUID -->
 <audio id="hackSound">
-<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
+type="audio/mpeg">
 </audio>
 
 <script>
 
 /* MATRIX EFFECT */
 
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
+const canvas =
+    document.getElementById('matrix');
+
+const ctx =
+    canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const letters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const letters =
+    '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 const fontSize = 16;
-const columns = canvas.width / fontSize;
+
+const columns =
+    canvas.width / fontSize;
 
 const drops = [];
 
 for(let x = 0; x < columns; x++){
+
     drops[x] = 1;
 }
 
 function drawMatrix(){
 
-    ctx.fillStyle = 'rgba(0,0,0,0.05)';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle =
+        'rgba(0,0,0,0.05)';
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
     ctx.fillStyle = '#00ff00';
-    ctx.font = fontSize + 'px monospace';
+
+    ctx.font =
+        fontSize + 'px monospace';
 
     for(let i = 0; i < drops.length; i++){
 
-        const text = letters.charAt(
-            Math.floor(Math.random() * letters.length)
+        const text =
+            letters.charAt(
+                Math.floor(
+                    Math.random()
+                    * letters.length
+                )
+            );
+
+        ctx.fillText(
+            text,
+            i * fontSize,
+            drops[i] * fontSize
         );
 
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if(drops[i] * fontSize > canvas.height && Math.random() > 0.975){
+        if(
+            drops[i] * fontSize
+            > canvas.height
+            &&
+            Math.random() > 0.975
+        ){
             drops[i] = 0;
         }
 
@@ -191,8 +308,11 @@ setInterval(drawMatrix, 35);
 
 /* TERMINAL TYPING */
 
-const text = 'INITIALIZING SECURE CONNECTION...';
-const typing = document.getElementById('typing');
+const text =
+'INITIALIZING SECURE CONNECTION...';
+
+const typing =
+    document.getElementById('typing');
 
 let i = 0;
 
@@ -200,7 +320,8 @@ function typeWriter(){
 
     if(i < text.length){
 
-        typing.innerHTML += text.charAt(i);
+        typing.innerHTML +=
+            text.charAt(i);
 
         i++;
 
@@ -214,14 +335,19 @@ typeWriter();
 
 function checkPassword(){
 
-    const password = document.getElementById('pw').value;
+    const password =
+        document.getElementById('pw').value;
 
     if(password === 'vodka'){
 
-        document.getElementById('hackSound').play();
+        document.getElementById(
+            'hackSound'
+        ).play();
 
         const decrypt =
-            document.getElementById('decrypting');
+            document.getElementById(
+                'decrypting'
+            );
 
         decrypt.style.display = 'block';
 
@@ -229,16 +355,70 @@ function checkPassword(){
 
             decrypt.style.display = 'none';
 
-            document.getElementById('secret')
-                .style.display = 'block';
+            document.getElementById(
+                'secret'
+            ).style.display = 'block';
 
-        }, 3000);
+            startCountdown();
+
+        }, 2000);
 
     } else {
 
-        alert('ABE = DOOD');
-
+        alert('ACCESS DENIED');
     }
+}
+
+/* COUNTDOWN */
+
+function startCountdown(){
+
+    let count = 5;
+
+    const countdown =
+        document.getElementById(
+            'countdown'
+        );
+
+    countdown.innerHTML = count;
+
+    const interval =
+        setInterval(() => {
+
+        count--;
+
+        if(count > 0){
+
+            countdown.innerHTML =
+                count;
+
+        } else {
+
+            clearInterval(interval);
+
+            countdown.innerHTML =
+                'IMAGE DECRYPTED';
+
+            revealImage();
+        }
+
+    }, 1000);
+}
+
+/* FOTO REVEAL */
+
+function revealImage(){
+
+    const img =
+        document.getElementById(
+            'bewijsfoto'
+        );
+
+    img.style.opacity = '1';
+
+    img.style.filter = 'blur(0px)';
+
+    img.style.transform = 'scale(1)';
 }
 
 </script>
