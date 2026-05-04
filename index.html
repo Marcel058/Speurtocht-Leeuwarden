@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ACCESS TERMINAL</title>
 
 <style>
@@ -20,8 +18,7 @@ html, body{
     color:#00ff00;
 }
 
-/* MATRIX ACHTERGROND */
-
+/* MATRIX */
 canvas{
     position:fixed;
     top:0;
@@ -29,8 +26,21 @@ canvas{
     z-index:0;
 }
 
-/* FULLSCREEN POPUP */
+/* CRASH EFFECT */
+.crash{
+    animation:shake 0.1s infinite;
+    filter:contrast(2) brightness(0.5);
+}
 
+@keyframes shake{
+    0%{transform:translate(2px,2px);}
+    25%{transform:translate(-2px,1px);}
+    50%{transform:translate(2px,-2px);}
+    75%{transform:translate(-1px,2px);}
+    100%{transform:translate(0,0);}
+}
+
+/* POPUP */
 #popup{
     position:fixed;
     inset:0;
@@ -40,40 +50,25 @@ canvas{
     z-index:5;
 }
 
-/* HACKER BOX */
-
 .box{
     width:90%;
     max-width:750px;
-
     background:rgba(0,0,0,0.92);
-
     border:2px solid #00ff00;
-
     border-radius:12px;
-
     padding:40px;
-
     text-align:center;
-
     box-shadow:0 0 30px #00ff00;
 }
-
-/* TITEL */
 
 h1{
     text-shadow:0 0 15px #00ff00;
 }
 
-/* TERMINAL TYPING */
-
 #typing{
     min-height:30px;
     margin-bottom:25px;
-    font-size:18px;
 }
-
-/* INPUT */
 
 input{
     background:black;
@@ -82,10 +77,7 @@ input{
     padding:12px;
     width:60%;
     font-size:18px;
-    font-family:monospace;
 }
-
-/* BUTTON */
 
 button{
     background:#00ff00;
@@ -93,329 +85,213 @@ button{
     border:none;
     padding:12px 24px;
     margin-left:10px;
-    font-weight:bold;
     cursor:pointer;
+    font-weight:bold;
 }
-
-button:hover{
-    box-shadow:0 0 15px #00ff00;
-}
-
-/* DECRYPTING */
 
 #decrypting{
     display:none;
-    margin-top:30px;
-    font-size:24px;
-    animation:blink 1s infinite;
+    margin-top:20px;
+    font-size:22px;
 }
-
-/* SECRET */
 
 #secret{
     display:none;
-    margin-top:30px;
+    margin-top:20px;
 }
-
-/* COUNTDOWN */
 
 #countdown{
-    font-size:55px;
-    margin-top:20px;
-    text-shadow:0 0 20px #00ff00;
+    font-size:50px;
+    margin-top:10px;
 }
 
-/* FOTO */
-
+/* IMAGE */
 #bewijsfoto{
-
-    width:350px;
-
-    margin-top:25px;
-
+    width:300px;
+    margin-top:20px;
     border:3px solid #00ff00;
-
-    border-radius:12px;
-
-    box-shadow:0 0 30px #00ff00;
-
+    border-radius:10px;
     opacity:0;
-
-    filter:blur(25px);
-
+    filter:blur(20px);
     transform:scale(0.9);
-
-    transition:all 4s ease;
+    transition:all 3s ease;
 }
 
-/* GLOW */
-
-.glow{
-    text-shadow:0 0 15px #00ff00;
-}
-
-/* BLINK */
-
-@keyframes blink{
-    50%{
-        opacity:0;
-    }
+/* FAIL ELEMENTS */
+#errorGif, #virus{
+    display:none;
+    margin-top:15px;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<!-- MATRIX -->
 <canvas id="matrix"></canvas>
 
-<!-- POPUP -->
 <div id="popup">
-
 <div class="box">
 
 <h1>🔐 ACCESS TERMINAL</h1>
 
 <div id="typing"></div>
 
-<input type="password"
-       id="pw"
-       placeholder="ENTER PASSWORD">
+<input type="password" id="pw" placeholder="ENTER PASSWORD">
+<button onclick="checkPassword()">UNLOCK</button>
 
-<button onclick="checkPassword()">
-UNLOCK
-</button>
+<div id="decrypting">DECRYPTING FILES...</div>
 
-<div id="decrypting">
-DECRYPTING FILES...
-</div>
-
-<!-- GEHEIME CONTENT -->
 <div id="secret">
 
-<h2 class="glow">
-🎉 ACCESS GRANTED
-</h2>
-
-</p>    
-<img id="bewijsfoto"
-     src="foto.jpg">
-    
-<p class="glow">
-
-We zijn er bijna. Nog één laatste stop:<br><br>
-
-51.5147° N, 7.6131° E
-
-</p>
+<h2>🎉 ACCESS GRANTED</h2>
 
 <div id="countdown"></div>
 
-<img id="bewijsfoto"
-     src="foto.jpg">
-</div>
+<img id="bewijsfoto" src="foto.jpg">
+
+<p>51.5147° N, 7.6131° E</p>
 
 </div>
 
+<!-- FAIL -->
+<div id="errorGif">
+    <img src="https://makeagif.com/i/tPE-cX" width="200">
+    <div>ACCESS DENIED</div>
 </div>
 
-<!-- GELUID -->
+<div id="virus">
+    ☠️ VIRUS DETECTED<br>
+    SYSTEM COMPROMISED
+</div>
+
+</div>
+</div>
+
 <audio id="hackSound">
-<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"
-type="audio/mpeg">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">
 </audio>
 
 <script>
 
-/* MATRIX EFFECT */
-
-const canvas =
-    document.getElementById('matrix');
-
-const ctx =
-    canvas.getContext('2d');
+/* MATRIX */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const letters =
-    '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
+const letters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const fontSize = 16;
-
-const columns =
-    canvas.width / fontSize;
-
-const drops = [];
-
-for(let x = 0; x < columns; x++){
-
-    drops[x] = 1;
-}
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
 
 function drawMatrix(){
+    ctx.fillStyle="rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    ctx.fillStyle =
-        'rgba(0,0,0,0.05)';
+    ctx.fillStyle="#00ff00";
+    ctx.font = fontSize + "px monospace";
 
-    ctx.fillRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
+    for(let i=0;i<drops.length;i++){
+        const text = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
 
-    ctx.fillStyle = '#00ff00';
-
-    ctx.font =
-        fontSize + 'px monospace';
-
-    for(let i = 0; i < drops.length; i++){
-
-        const text =
-            letters.charAt(
-                Math.floor(
-                    Math.random()
-                    * letters.length
-                )
-            );
-
-        ctx.fillText(
-            text,
-            i * fontSize,
-            drops[i] * fontSize
-        );
-
-        if(
-            drops[i] * fontSize
-            > canvas.height
-            &&
-            Math.random() > 0.975
-        ){
-            drops[i] = 0;
+        if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
+            drops[i]=0;
         }
-
         drops[i]++;
     }
 }
+setInterval(drawMatrix,35);
 
-setInterval(drawMatrix, 35);
-
-/* TERMINAL TYPING */
-
-const text =
-'INITIALIZING SECURE CONNECTION...';
-
-const typing =
-    document.getElementById('typing');
-
-let i = 0;
+/* TYPE */
+const text="INITIALIZING SECURE CONNECTION...";
+let i=0;
+const typing=document.getElementById("typing");
 
 function typeWriter(){
-
-    if(i < text.length){
-
-        typing.innerHTML +=
-            text.charAt(i);
-
+    if(i<text.length){
+        typing.innerHTML+=text[i];
         i++;
-
-        setTimeout(typeWriter, 60);
+        setTimeout(typeWriter,60);
     }
 }
-
 typeWriter();
 
-/* PASSWORD CHECK */
-
+/* PASSWORD */
 function checkPassword(){
 
-    const password =
-        document.getElementById('pw').value;
+const pw=document.getElementById("pw").value;
 
-    if(password === 'VODKA'){
+if(pw==="VODKA"){
 
-        document.getElementById(
-            'hackSound'
-        ).play();
+    document.getElementById("hackSound").play();
 
-        const decrypt =
-            document.getElementById(
-                'decrypting'
-            );
+    document.getElementById("decrypting").style.display="block";
 
-        decrypt.style.display = 'block';
+    setTimeout(()=>{
 
-        setTimeout(() => {
+        document.getElementById("decrypting").style.display="none";
+        document.getElementById("secret").style.display="block";
 
-            decrypt.style.display = 'none';
+        startCountdown();
 
-            document.getElementById(
-                'secret'
-            ).style.display = 'block';
+    },2000);
 
-            startCountdown();
+} else {
 
-        }, 2000);
+    document.body.classList.add("crash");
 
-    } else {
+    document.getElementById("errorGif").style.display="block";
+    document.getElementById("virus").style.display="block";
 
-        alert('ACCESS DENIED');
-    }
+    setTimeout(()=>{
+
+        document.body.classList.remove("crash");
+
+        document.getElementById("errorGif").style.display="none";
+        document.getElementById("virus").style.display="none";
+
+        document.getElementById("pw").value="";
+
+    },3000);
+}
+
 }
 
 /* COUNTDOWN */
-
 function startCountdown(){
 
-    let count = 5;
+let count=5;
+const cd=document.getElementById("countdown");
+cd.innerHTML=count;
 
-    const countdown =
-        document.getElementById(
-            'countdown'
-        );
+const interval=setInterval(()=>{
 
-    countdown.innerHTML = count;
+    count--;
 
-    const interval =
-        setInterval(() => {
+    if(count>0){
+        cd.innerHTML=count;
+    } else {
+        clearInterval(interval);
+        cd.innerHTML="IMAGE DECRYPTED";
+        revealImage();
+    }
 
-        count--;
+},1000);
 
-        if(count > 0){
-
-            countdown.innerHTML =
-                count;
-
-        } else {
-
-            clearInterval(interval);
-
-            countdown.innerHTML =
-                'IMAGE DECRYPTED';
-
-            revealImage();
-        }
-
-    }, 1000);
 }
 
-/* FOTO REVEAL */
-
+/* IMAGE REVEAL */
 function revealImage(){
 
-    const img =
-        document.getElementById(
-            'bewijsfoto'
-        );
+const img=document.getElementById("bewijsfoto");
 
-    img.style.opacity = '1';
+img.style.opacity="1";
+img.style.filter="blur(0px)";
+img.style.transform="scale(1)";
 
-    img.style.filter = 'blur(0px)';
-
-    img.style.transform = 'scale(1)';
 }
 
 </script>
