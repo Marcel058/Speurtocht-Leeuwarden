@@ -3,27 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <title>Speurtocht Leeuwarden</title>
+
 <style>
 body {
-    font-family: Arial;
+    background-color: #0d1117;
+    color: #00ff66;
+    font-family: monospace;
     text-align: center;
     margin-top: 120px;
-    background: #f4f4f4;
 }
 
 .box {
-    background: white;
+    border: 2px solid #00ff66;
     display: inline-block;
     padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 20px #00ff66;
+    background: rgba(0,0,0,0.8);
+}
+
+input {
+    background: black;
+    border: 1px solid #00ff66;
+    color: #00ff66;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    background: #00ff66;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    opacity: 0.8;
 }
 
 #secret {
     display: none;
-    margin-top: 20px;
+    margin-top: 25px;
     font-size: 22px;
-    color: green;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #00ff66;
+    }
+    to {
+        text-shadow: 0 0 20px #00ff66;
+    }
 }
 </style>
 </head>
@@ -31,27 +65,29 @@ body {
 <body>
 
 <div class="box">
-    <h2>🔐 Voer wachtwoord in</h2>
+    <h1>🔐 ACCESS REQUIRED</h1>
 
-    <input type="password" id="pw" placeholder="wachtwoord">
-    <button onclick="check()">OK</button>
+    <p>Voer de geheime code in</p>
+
+    <input type="password" id="pw">
+    <button onclick="check()">UNLOCK</button>
 
     <div id="secret">
-        🎉 Goed gedaan! Nog één laatste stop:
-            51.5147° N, 7.6131° E 
-        Ga hiernaar toe en je weekend kan dan echt beginnen.
+        🎉 Toegang verleend!<br><br>
+        Volgende locatie:<br>
+        Oldehove
     </div>
 </div>
 
 <script>
 function check() {
-    const code = "vodka"; // <-- dit is je wachtwoord
+    const code = "leeuwarden";
     const input = document.getElementById("pw").value;
 
-    if (input === code) {
+    if(input === code) {
         document.getElementById("secret").style.display = "block";
     } else {
-        alert("Fout wachtwoord!");
+        alert("ACCESS DENIED");
     }
 }
 </script>
